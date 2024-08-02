@@ -1,5 +1,6 @@
 package com.personal.spring_security.config;
 
+import com.personal.spring_security.service.EmployeeUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -24,22 +25,24 @@ public class EmployeeSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("user"))  // Encode password
-                .roles("USER")
-                .build();
+//        UserDetails employee = User.withUsername("user")
+//                .password(passwordEncoder.encode("user"))  // Encode password
+//                .roles("EMPLOYEE")
+//                .build();
+//
+//        UserDetails hr = User.withUsername("admin")
+//                .password(passwordEncoder.encode("admin"))  // Encode password
+//                .roles("HR")
+//                .build();
+//
+//        UserDetails admin = User.withUsername("root")
+//                .password(passwordEncoder.encode("root"))  // Encode password
+//                .roles("EMPLOYEE","HR")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(employee, admin, hr);
 
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))  // Encode password
-                .roles("ADMIN")
-                .build();
-
-        UserDetails userAdmin = User.withUsername("root")
-                .password(passwordEncoder.encode("root"))  // Encode password
-                .roles("USER_ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin, userAdmin);
+        return new EmployeeUserDetailService();
     }
 
     @Bean
@@ -52,7 +55,7 @@ public class EmployeeSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/employees/login").permitAll()  // Unrestricted access
+                                .requestMatchers("/employees/login","/employees/create").permitAll()  // Unrestricted access
                                 .requestMatchers("/employees/**").authenticated()  // Requires authentication
                                 .anyRequest().authenticated()  // Any other requests need to be authenticated
                 )

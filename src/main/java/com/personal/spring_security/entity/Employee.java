@@ -23,4 +23,7 @@ public class Employee {
     private double salary;
     private String email;
     private String dept;
+    private String username;
+    private String password;
+    private String roles;
 }
